@@ -1,0 +1,21 @@
+<resources>
+
+    <string name="app_name">ListViewDemo1</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_list_view_demo1">ListViewDemo1Activity</string>
+
+    <string-array name="fruits">
+        <item>Apple</item>
+        <item>Mango</item>
+        <item>Orange</item>
+        <item>Grapes</item>
+        <item>Banana</item>
+    </string-array>
+    <string-array name="fruits2">
+        <item>Grapes</item>
+        <item>Kiwis</item>
+        <item>Pineapples</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,87 @@
+package itp341.poole.connor.a5.app;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.google.gson.annotations.Expose;
+
+import android.content.Context;
+
+public class Note {
+	@Expose private String title;
+	@Expose private String content;
+	@Expose private SimpleDateFormat ISO8061StringModified;
+	@Expose private SimpleDateFormat ISO8061StringCreated;
+	private Date dateCreated;
+	private Date lastModified;
+	private java.text.DateFormat formattedCreationDate;
+	private java.text.DateFormat formattedModifiedDate;
+	
+	public Note(String title, String content, Date dateCreated, Date lastModified, java.text.DateFormat formattedCreationDate,
+			java.text.DateFormat formattedModifiedDate) {
+		super();
+		this.title = title;
+		this.content = content;
+		this.dateCreated = dateCreated;
+		this.lastModified = lastModified;
+		this.formattedCreationDate = formattedCreationDate;
+		this.formattedModifiedDate = formattedModifiedDate;
+	}
+	public Note(String title, String content, Date dateCreated, Date lastModified, Context context) {
+		super();
+		this.title = title;
+		this.content = content;
+		this.dateCreated = dateCreated;
+		this.lastModified = lastModified;
+		this.formattedCreationDate = android.text.format.DateFormat.getDateFormat(context);
+		this.formattedModifiedDate = android.text.format.DateFormat.getDateFormat(context);
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public Date getDateCreated(){
+		return dateCreated;
+	}
+	public Date getLastModified(){
+		return lastModified;
+	}
+	public void setLastModified(Date lastModified){
+		this.lastModified = lastModified;
+	}
+	public java.text.DateFormat getFormattedCreated(){
+		return formattedCreationDate;
+	}
+	public java.text.DateFormat getFormattedModifiedDate(){
+		return formattedModifiedDate;
+	}
+	public String getStringModifiedDate(){
+		return formattedModifiedDate.format(lastModified);
+	}
+	public String getStringCreatedDate(){
+		return formattedCreationDate.format(dateCreated);
+	}
+	public SimpleDateFormat getDateStringCreated(){
+		return ISO8061StringCreated;
+	}
+	public void setDateStringCreated(SimpleDateFormat date){
+		this.ISO8061StringCreated = date;
+	}
+	public void setDateStringModified(SimpleDateFormat date){
+		this.ISO8061StringModified = date;
+	}
+	public SimpleDateFormat getDateStringModified(){
+		return ISO8061StringModified;
+	}
+	
+	
+}

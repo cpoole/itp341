@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <EditTextPreference
+        android:defaultValue="User"
+        android:key="pref_key_name"
+        android:summary="Enter your preferred name"
+        android:title="Name" />
+	<ListPreference
+	    android:defaultValue="@string/quotes_donne"
+	    android:entries="@array/prefs_poet_names"
+	    android:entryValues="@array/prefs_poet_values"
+	    android:key="prefs_key_poet"
+	    android:title="Poet Name"
+	    android:summary="Choose a poet" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_key_red_color"
+        android:summary="Override the black text color to red"
+        android:title="Use red font" />
+
+</PreferenceScreen>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Week5Formatting</string>
+    <string name="hello_world">Hello world!</string>
+    
+    <string name="label_division_output">%1$d divided %2$d equals %3$.3f</string>
+
+</resources>

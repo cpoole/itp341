@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">A2.Poole.Connor</string>
+    <string name="hello_world">Do you want to order tea or coffee?</string>
+    <string name="coffee">coffee</string>
+    <string name="tea">Tea</string>
+    <string name="teaNotification">You ordered a tea! (</string>
+    <string name="coffeeNotification">You ordered a coffee! (</string>
+    <string name="timeClose">" Times)"</string>
+
+</resources>

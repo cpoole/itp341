@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Week2-HelloWorld</string>
+    <string name="hello_world">Good morning Class.</string>
+
+</resources>

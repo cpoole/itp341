@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">A5.poole.connor.</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="editTitle">Title</string>
+    <string name="saveNote">Save</string>
+    <string name="title_activity_note_editor">NoteEditor</string>
+	<string name="action_add">Add New</string>
+	
+</resources>

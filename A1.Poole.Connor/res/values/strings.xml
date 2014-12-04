@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">A1.Poole.Connor</string>
+    <string name="hello_world">Hello ITP 341!</string>
+    <string name="greeting">Hi, my name is Connor and this is my first app</string>
+
+</resources>

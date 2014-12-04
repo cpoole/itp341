@@ -1,0 +1,100 @@
+package itp341.poole.connor.a5.app;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import android.app.Activity;
+import android.app.ListActivity;
+import android.content.res.AssetManager;
+import android.os.Bundle;
+import android.provider.MediaStore.Files;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+public class NoteList extends ListActivity {
+	
+	String[] noteTitles;
+	String[] noteDates;
+	ArrayList<String> listNoteTitles = new ArrayList<String>();
+	ArrayList<String> listNoteDates = new ArrayList<String>();
+	
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.note_list);
+		String FileContent = "";
+		try {
+			AssetManager am = getApplicationContext().getAssets();
+			BufferedReader bfr = new BufferedReader(new InputStreamReader(am.open("notes.json")));
+			while(true){
+				String line = bfr.readLine();
+				if (line == null)
+					break;
+				FileContent += line;	
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
+		Note[] notes = gson.fromJson(FileContent,  Note[].class);
+		Log.d("NoteList","first date is"+ notes[0].getDateStringCreated());
+		for(int i=0; i< notes.length; i++){
+			listNoteTitles.add(notes[i].getTitle());
+			listNoteDates.add(notes[i].getDateStringModified().toString());
+		}
+		noteTitles = new String[listNoteTitles.size()];
+		noteDates = new String[listNoteDates.size()];
+		noteTitles = listNoteTitles.toArray(noteTitles);
+		noteDates = listNoteDates.toArray(noteDates);
+
+		Log.d("NoteList","created string array");
+		
+		////////////////CREATING THE LIST VIEW ADAPTER///////////////////
+		List<HashMap<String,String>> hashList = new ArrayList<HashMap<String,String>>();
+		for(int i=0; i<noteTitles.length; i++){
+			HashMap<String,String> hm = new HashMap<String,String>();
+			hm.put("title", noteTitles[i]);
+			hm.put("date", noteDates[i]);
+			hashList.add(hm);
+		}
+		//Keys used for hashmaps
+		String[] keys = {"title","date"};
+		// Id's for text views in listview layout
+		int[] ids = {R.id.title, R.id.date};
+		SimpleAdapter adapter = new SimpleAdapter(
+				this, 
+				hashList, 
+				R.layout.note_list,
+				keys,
+				ids);
+		getListView().setChoiceMode(ListView.CHOICE_MODE_NONE);		
+		setListAdapter(adapter);
+		///////////////////////////////////////////////////////////////////
+	}
+	@Override
+    public void onListItemClick(ListView parent, View v, int position, long id) {
+        super.onListItemClick(parent, v, position, id);  
+    }
+		
+}
