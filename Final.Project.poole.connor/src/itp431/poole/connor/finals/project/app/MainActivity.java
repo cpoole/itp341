@@ -5,8 +5,13 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +31,26 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
 	 */
+	
+	public static Intent newInstagramProfileIntent(PackageManager pm, String url) {
+	    Intent intent = new Intent(Intent.ACTION_VIEW);
+	    try {
+	        if (pm.getPackageInfo("com.instagram.android", 0) != null) {
+	            if (url.endsWith("/")) {
+	                url = url.substring(0, url.length() - 1);
+	            }
+	            String username = url.substring(url.lastIndexOf("/") + 1);
+	            // http://stackoverflow.com/questions/21505941/intent-to-open-instagram-user-profile-on-android
+	            intent.setData(Uri.parse("http://instagram.com/_u/" + username));
+	            intent.setPackage("com.instagram.android");
+	            return intent;
+	        }
+	    } catch (NameNotFoundException e) {
+	    }
+	    intent.setData(Uri.parse(url));
+	    return intent;
+	}
+	
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
 	/**
@@ -51,8 +76,25 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-				.commit();
+		switch(position){
+		case 0:
+			fragmentManager.beginTransaction().replace(R.id.container, PunchCardFragment.newInstance(position + 1))
+			.commit();
+			break;
+		case 1:
+			fragmentManager.beginTransaction().replace(R.id.container, MenuFragment.newInstance(position + 1))
+			.commit();
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			startActivity(newInstagramProfileIntent(this.getPackageManager(),"http://instagram.com/sunnin_lebanese_cafe/"));
+			break;
+		}
 	}
 
 	public void onSectionAttached(int number) {
@@ -65,6 +107,14 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 			break;
 		case 3:
 			mTitle = getString(R.string.title_section3);
+			break;
+		case 4:
+			mTitle = getString(R.string.title_section4);
+			break;
+		case 5:
+			mTitle = getString(R.string.title_section5);
+			break;
+		case 6:
 			break;
 		}
 	}

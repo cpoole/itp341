@@ -1,0 +1,13 @@
+package itp431.poole.connor.finals.project.app.views;
+
+import android.content.Context;
+import android.graphics.Paint;
+import android.view.View;
+
+public class drawView extends View{
+	Paint paint= new Paint();
+	
+	public drawView(Context context){
+		super(context);
+	}
+}

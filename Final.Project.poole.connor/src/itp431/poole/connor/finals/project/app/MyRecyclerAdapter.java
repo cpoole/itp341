@@ -1,5 +1,6 @@
 package itp431.poole.connor.finals.project.app;
 
+import itp431.poole.connor.finals.project.app.models.FruitModel;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
