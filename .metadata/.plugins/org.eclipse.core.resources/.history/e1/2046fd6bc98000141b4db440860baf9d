@@ -1,0 +1,8 @@
+package itp341.poole.connor.a5.app.listeners;
+
+import android.support.v7.widget.RecyclerView;
+
+
+public class RecylerItemClickListener implements RecyclerView.OnItemTouchListener {
+
+}

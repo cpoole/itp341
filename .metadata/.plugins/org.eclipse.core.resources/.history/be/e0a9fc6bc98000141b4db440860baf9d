@@ -1,0 +1,5 @@
+package itp341.poole.connor.a5.app.listeners;
+
+public class RecylerItemClickListener {
+
+}
