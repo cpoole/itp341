@@ -60,7 +60,6 @@ public class PunchCardFragment extends Fragment {
 		linearView = inflater.inflate(R.layout.punchcard_fragment, container, false);
 		linearLayout = (LinearLayout) linearView.findViewById(R.id.rootLinear);
 		rootView.setBackgroundResource(R.drawable.bg1);
-		Toast.makeText(getActivity(), "numPunches"+ userManager.getNumPunches(), Toast.LENGTH_SHORT).show();
 		for (int i=0; i<userManager.getNumPunches(); i++){
 			linearLayout.addView(new punchMark(getActivity(),i));
 		}

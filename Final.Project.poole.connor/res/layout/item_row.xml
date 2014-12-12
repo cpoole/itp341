@@ -12,17 +12,26 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
         android:contentDescription="TODO"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/utensiles" />
+	
+	<ImageView 
+        android:id="@+id/cartIcon"
+        android:src="@drawable/flat_shopping"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:paddingRight="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-4dp"/>
 
     <TextView
         android:id="@+id/secondLine"
-        android:layout_width="fill_parent"
-        android:layout_height="26dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/foodIcon"
-        android:ellipsize="marquee"
-        android:singleLine="true"
+        android:layout_toLeftOf="@id/cartIcon"
+        android:maxLines="2"
         android:text="Description"
         android:textSize="12sp" />
 
@@ -40,21 +49,16 @@
         android:textSize="16sp" />
     
      
-    <ImageView 
-        android:id="@+id/cartIcon"
-        android:src="@drawable/flat_shopping"
-        android:layout_alignParentRight="true"
-        android:layout_height="fill_parent"
-        android:layout_width="wrap_content"
-        android:paddingRight="5dp"/>
     
      <TextView 
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_above="@id/cartIcon"
         android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_height="wrap_content"
-        android:text="8.50"
-        android:textSize="8sp" /> 
+        android:textSize="12sp" 
+        android:layout_marginRight="5dp"/> 
         
 </RelativeLayout> 

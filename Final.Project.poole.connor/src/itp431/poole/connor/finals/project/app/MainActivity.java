@@ -1,5 +1,7 @@
 package itp431.poole.connor.finals.project.app;
 
+import itp431.poole.connor.finals.project.app.database.FinalDataSource;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -40,7 +42,10 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	public static menuItem[] food;
 	public static final String PREFERENCE_FILENAME = "itp.341.poole.connor.a5.app.app_prefs";
 	public static final String PREFERENCE_INITIAL_BOOT = "itp.341.poole.connor.a5.app.initial_boot";
+	public static final String PREFERENCE_NUM_PUNCHES = "itp.341.poole.connor.a5.app.num_punches";
+	
 	SharedPreferences prefs;
+	private FinalDataSource menuDatasource;
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -86,6 +91,10 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		ArrayList<menuItem> menuItems;
+		
+		menuDatasource = new FinalDataSource(this);
+		menuDatasource.open();
 		
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(
 				R.id.navigation_drawer);
@@ -112,13 +121,20 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 			SharedPreferences.Editor prefEditor = prefs.edit();
 			prefEditor.putString(PREFERENCE_INITIAL_BOOT,"false");
 			prefEditor.commit();
-		}else{
-			FileWriter fread = new FileWriter(getApplicationContext());
-			FileContent = fread.readFile("notes.json");
-		}
+			
+			Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+			menuItems = new ArrayList<menuItem>(Arrays.asList(gson.fromJson(FileContent,  menuItem[].class)));
+			for(int i=0; i< menuItems.size();i++){
+				String strPrice = String.valueOf(menuItems.get(i).getPrice());
+				menuDatasource.createMenuItem(menuItems.get(i).getType(), menuItems.get(i).getTitle(), menuItems.get(i).getDescription(), strPrice);
+			}
 
-		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		menuManager.setMenuEntries(new ArrayList<menuItem>(Arrays.asList(gson.fromJson(FileContent,  menuItem[].class))));
+		}else{
+			menuItems = (ArrayList<menuItem>) menuDatasource.getAllMenuItems();
+		} 
+		
+		menuManager.setMenuEntries(menuItems);
+		userManager.setNumPunches(prefs.getInt(PREFERENCE_NUM_PUNCHES, 0));
 		
 	}
 
@@ -201,5 +217,17 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	 @Override
+	  protected void onResume() {
+	    menuDatasource.open();
+	    super.onResume();
+	  }
+
+	  @Override
+	  protected void onPause() {
+	    menuDatasource.close();
+	    super.onPause();
+	  }
 
 }

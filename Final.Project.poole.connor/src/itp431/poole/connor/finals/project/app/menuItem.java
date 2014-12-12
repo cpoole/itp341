@@ -7,6 +7,16 @@ public class menuItem {
 	@Expose private String title;
 	@Expose private String description;
 	@Expose private float price;
+	private long id;
+	public menuItem(){
+		
+	}
+	public menuItem(String type, String title, String description, String price){
+		this.type = type;
+		this.title = title;
+		this.description = description;
+		this.price = Float.parseFloat(price);
+	}
 	public String getType() {
 		return type;
 	}
@@ -30,6 +40,12 @@ public class menuItem {
 	}
 	public void setPrice(float price) {
 		this.price = price;
+	}
+	public long getId(){
+		return id;
+	}
+	public void setId(long id){
+		this.id = id;
 	}
 
 }

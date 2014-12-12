@@ -1,5 +1,6 @@
 package itp431.poole.connor.finals.project.app;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import itp341.poole.connor.finals.project.app.parallaxView.ParallaxRecyclerAdapter;
@@ -19,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MenuFragment extends Fragment {
 	private RecyclerView recyclerView;
@@ -73,25 +73,15 @@ public class MenuFragment extends Fragment {
 	@Override
 	public void  onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		final List<FruitModel> fruitsData = new ArrayList<FruitModel>();
-		fruitsData.add(new FruitModel("Apple"));
-		fruitsData.add(new FruitModel("Banana"));
-		fruitsData.add(new FruitModel("Orange"));
-		fruitsData.add(new FruitModel("Pineapple"));
-		fruitsData.add(new FruitModel("Mango"));
-        fruitsData.add(new FruitModel("Watermelon"));
-        fruitsData.add(new FruitModel("Strawberry"));
-        fruitsData.add(new FruitModel("Grapes"));
-        fruitsData.add(new FruitModel("Jackfruit"));
-        fruitsData.add(new FruitModel("Carrot"));
-        fruitsData.add(new FruitModel("Fig"));
+		final ArrayList<menuItem> foodEntries = menuManager.getMenuEntries();
 		//set layoutManger
 		LinearLayoutManager manager = new LinearLayoutManager(getActivity());
 		manager.setOrientation(LinearLayoutManager.VERTICAL);
 		recyclerView.setLayoutManager(manager);
 		recyclerView.setHasFixedSize(true);
 		
-		ParallaxRecyclerAdapter<FruitModel> mAdapter = new ParallaxRecyclerAdapter<>(fruitsData);
+		
+		ParallaxRecyclerAdapter<menuItem> mAdapter = new ParallaxRecyclerAdapter<>(menuManager.getMenuEntries());
 		mAdapter.implementRecyclerAdapterMethods(new ParallaxRecyclerAdapter.RecyclerAdapterMethods(){
 			@Override
 			public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
@@ -102,16 +92,17 @@ public class MenuFragment extends Fragment {
 			
 			@Override
 			public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position){
-				((SimpleViewHolder) viewHolder).foodTitle.setText(fruitsData.get(position).getFruitName());
+				((SimpleViewHolder) viewHolder).foodTitle.setText(foodEntries.get(position).getTitle());
+				((SimpleViewHolder) viewHolder).foodDescription.setText(foodEntries.get(position).getDescription());
+				float price = foodEntries.get(position).getPrice();
+				String strPrice = String.valueOf(price);
+				((SimpleViewHolder) viewHolder).foodPrice.setText(strPrice);
 				
 			}
-
 			@Override
 			public int getItemCount() {
-				return fruitsData.size();
+				return foodEntries.size();
 			}
-			
-		
 		});
 		
 		mAdapter.setParallaxHeader(LayoutInflater.from(getActivity()).inflate(R.layout.parallax_header,recyclerView, false), recyclerView);
@@ -133,13 +124,12 @@ public class MenuFragment extends Fragment {
 	static class SimpleViewHolder extends RecyclerView.ViewHolder {
 		public TextView foodTitle;
 		public TextView foodDescription;
+		public TextView foodPrice;
 		public SimpleViewHolder(View itemView) {
 			super(itemView);
 			foodTitle = (TextView) itemView.findViewById(R.id.firstLine);
 			foodDescription = (TextView) itemView.findViewById(R.id.secondLine);
+			foodPrice = (TextView) itemView.findViewById(R.id.price);
 		}
-
 	}
-	
-	
 }

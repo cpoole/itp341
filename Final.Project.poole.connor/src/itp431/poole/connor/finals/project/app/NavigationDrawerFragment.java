@@ -12,6 +12,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -276,7 +277,6 @@ public class NavigationDrawerFragment extends Fragment {
 		}
 
 		if (item.getItemId() == R.id.action_example) {
-			Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
 			Intent intent = new Intent(getActivity(), ZBarScannerActivity.class);
 			intent.putExtra(ZBarConstants.SCAN_MODES,  new int[]{Symbol.QRCODE});
 			startActivityForResult(intent, ZBAR_SCANNER_REQUEST);
@@ -318,8 +318,11 @@ public class NavigationDrawerFragment extends Fragment {
 	    if (resultCode == Activity.RESULT_OK) 
 	    {
 	    	if(data.getStringExtra(ZBarConstants.SCAN_RESULT).toString().equals("redeem")){
-	    		Toast.makeText(getActivity(), "Code Successfull from nav", Toast.LENGTH_SHORT).show();
 	    		userManager.addPunch();
+	    		SharedPreferences prefs = getActivity().getSharedPreferences(MainActivity.PREFERENCE_FILENAME, android.content.Context.MODE_PRIVATE);
+	    		SharedPreferences.Editor prefEditor = prefs.edit();
+	    		prefEditor.putInt(MainActivity.PREFERENCE_NUM_PUNCHES, userManager.getNumPunches());
+	    		prefEditor.commit();
 	    		selectItem(0);
 	    	}else{
 	    		Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();

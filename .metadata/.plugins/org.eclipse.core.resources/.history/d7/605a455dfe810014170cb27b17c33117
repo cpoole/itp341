@@ -1,0 +1,5 @@
+package itp431.poole.connor.finals.project.app.database;
+
+public class MySQLiteHelper {
+
+}
