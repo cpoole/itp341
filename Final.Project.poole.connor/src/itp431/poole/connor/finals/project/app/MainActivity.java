@@ -1,13 +1,22 @@
 package itp431.poole.connor.finals.project.app;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,11 +35,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+	public static final String PREFERENCE_FILENAME = "itp.341.poole.connor.a5.app.app_prefs";
+	public static final String PREFERENCE_INITIAL_BOOT = "itp.341.poole.connor.a5.app.initial_boot";
+	SharedPreferences prefs;
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
 	 */
+	private NavigationDrawerFragment mNavigationDrawerFragment;
+	/**
+	 * Used to store the last screen title. For use in
+	 * {@link #restoreActionBar()}.
+	 */
+	private CharSequence mTitle;
 	
 	public static Intent newInstagramProfileIntent(PackageManager pm, String url) {
 	    Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -51,25 +69,54 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 	    return intent;
 	}
 	
-	private NavigationDrawerFragment mNavigationDrawerFragment;
+	public static Intent newPhoneCallIntent(String number){
 
-	/**
-	 * Used to store the last screen title. For use in
-	 * {@link #restoreActionBar()}.
-	 */
-	private CharSequence mTitle;
+		 String uri = "tel:" + number.trim() ;
+		 Intent intent = new Intent(Intent.ACTION_CALL);
+		 intent.setData(Uri.parse(uri));
+		 return(intent);
+	}
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
+		
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(
 				R.id.navigation_drawer);
 		mTitle = getTitle();
 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+		
+		prefs = getSharedPreferences(PREFERENCE_FILENAME, MODE_PRIVATE);
+		String FileContent = "";
+		if(prefs.getString(PREFERENCE_INITIAL_BOOT, "default") == "default"){
+			try {
+				AssetManager am = getApplicationContext().getAssets();
+				BufferedReader bfr = new BufferedReader(new InputStreamReader(am.open("initial.json")));
+				while(true){
+					String line = bfr.readLine();
+					if (line == null)
+						break;
+					FileContent += line;	
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			SharedPreferences.Editor prefEditor = prefs.edit();
+			prefEditor.putString(PREFERENCE_INITIAL_BOOT,"false");
+			prefEditor.commit();
+		}else{
+			FileWriter fread = new FileWriter(getApplicationContext());
+			FileContent = fread.readFile("notes.json");
+		}
+
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+		//notes = gson.fromJson(FileContent,  Note[].class);
+		
 	}
 
 	@Override
@@ -88,6 +135,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		case 2:
 			break;
 		case 3:
+			startActivity(newPhoneCallIntent("310-475-3358"));
 			break;
 		case 4:
 			break;

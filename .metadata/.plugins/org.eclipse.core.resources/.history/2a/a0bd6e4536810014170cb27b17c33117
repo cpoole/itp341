@@ -1,0 +1,37 @@
+package itp431.poole.connor.finals.project.app.views;
+
+import android.R;
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.view.View;
+
+public class drawView extends View{
+	Paint paint= new Paint();
+	
+	public drawView(Context context){
+		super(context);
+	}
+	
+	@Override
+    public void onDraw(Canvas canvas) {
+        paint.setColor(Color.BLACK);
+        paint.setStrokeWidth(20);
+        paint.setAlpha(200);
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+        double vertOffset= (height*.35);
+        double horizOffset = ((width*.05)); 
+        canvas.drawRect( (int)horizOffset, (int)vertOffset, width-(int)horizOffset, height-(int)vertOffset, paint);
+//        paint.setStrokeWidth(0);
+//        paint.setColor(Color.CYAN);
+//        canvas.drawRect(33, 60, 77, 77, paint );
+//        paint.setColor(Color.YELLOW);
+//        canvas.drawRect(33, 33, 77, 60, paint );
+
+    }
+}

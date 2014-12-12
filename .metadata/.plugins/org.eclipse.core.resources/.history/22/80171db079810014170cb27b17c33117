@@ -1,0 +1,17 @@
+package itp431.poole.connor.finals.project.app.views;
+
+import android.content.Context;
+import android.graphics.Paint;
+import android.view.View;
+
+public class punchMark extends View {
+	Paint paing = new Paint();
+	private int punchNum;
+	public punchMark(Context context, int i){
+		super(context);
+		punchNum = i;
+	}
+	
+	
+
+}

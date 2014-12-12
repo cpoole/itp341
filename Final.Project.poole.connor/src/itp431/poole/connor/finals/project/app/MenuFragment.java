@@ -1,12 +1,15 @@
 package itp431.poole.connor.finals.project.app;
+import java.util.ArrayList;
+import java.util.List;
+
+import itp341.poole.connor.finals.project.app.parallaxView.ParallaxRecyclerAdapter;
 import itp431.poole.connor.finals.project.app.R;
-import itp431.poole.connor.finals.project.app.ZBar.ZBarScannerActivity;
-import itp431.poole.connor.finals.project.app.ZBar.ZBarConstants;
 import itp431.poole.connor.finals.project.app.listeners.RecyclerItemClickListener;
 import itp431.poole.connor.finals.project.app.models.FruitModel;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,13 +18,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
-import net.sourceforge.zbar.Symbol;
 
 public class MenuFragment extends Fragment {
 	private RecyclerView recyclerView;
-	private static final int ZBAR_SCANNER_REQUEST = 0;
-	private static final int ZBAR_QR_SCANNER_REQUEST = 1;
 	/**
 	 * The fragment argument representing the section number for this
 	 * fragment.
@@ -46,15 +47,16 @@ public class MenuFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.menu_fragment, container, false);
 		recyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
+		
 		recyclerView.addOnItemTouchListener(
 				new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
 					
 					@Override
 					public void onItemClick(View view, int position) {
-						Intent intent = new Intent(getActivity(), ZBarScannerActivity.class);
-						intent.putExtra(ZBarConstants.SCAN_MODES,  new int[]{Symbol.QRCODE});
-						startActivityForResult(intent, ZBAR_SCANNER_REQUEST);
-						//Log.d("itp341","hello from on click");
+//						Intent intent = new Intent(getActivity(), ZBarScannerActivity.class);
+//						intent.putExtra(ZBarConstants.SCAN_MODES,  new int[]{Symbol.QRCODE});
+//						startActivityForResult(intent, ZBAR_SCANNER_REQUEST);
+//						//Log.d("itp341","hello from on click");
 						
 					}
 				}));
@@ -71,46 +73,73 @@ public class MenuFragment extends Fragment {
 	@Override
 	public void  onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		FruitModel fruitsData[] = { 
-				new FruitModel("Apple"),
-                new FruitModel("Banana"),
-                new FruitModel("Orange"),
-                new FruitModel("Pineapple"),
-                new FruitModel("Mango"),
-                new FruitModel("Watermelon"),
-                new FruitModel("Strawberry"),
-                new FruitModel("Grapes"),
-                new FruitModel("Jackfruit"),
-                new FruitModel("Carrot"),
-                new FruitModel("Fig")
-			};
+		final List<FruitModel> fruitsData = new ArrayList<FruitModel>();
+		fruitsData.add(new FruitModel("Apple"));
+		fruitsData.add(new FruitModel("Banana"));
+		fruitsData.add(new FruitModel("Orange"));
+		fruitsData.add(new FruitModel("Pineapple"));
+		fruitsData.add(new FruitModel("Mango"));
+        fruitsData.add(new FruitModel("Watermelon"));
+        fruitsData.add(new FruitModel("Strawberry"));
+        fruitsData.add(new FruitModel("Grapes"));
+        fruitsData.add(new FruitModel("Jackfruit"));
+        fruitsData.add(new FruitModel("Carrot"));
+        fruitsData.add(new FruitModel("Fig"));
 		//set layoutManger
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        MyRecyclerAdapter mAdapter = new MyRecyclerAdapter(fruitsData);
+		LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+		manager.setOrientation(LinearLayoutManager.VERTICAL);
+		recyclerView.setLayoutManager(manager);
+		recyclerView.setHasFixedSize(true);
+		
+		ParallaxRecyclerAdapter<FruitModel> mAdapter = new ParallaxRecyclerAdapter<>(fruitsData);
+		mAdapter.implementRecyclerAdapterMethods(new ParallaxRecyclerAdapter.RecyclerAdapterMethods(){
+			@Override
+			public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
+				View itemLayoutView = (LayoutInflater.from(getActivity()).inflate(R.layout.item_row, viewGroup, false));
+				SimpleViewHolder mViewHolder = new SimpleViewHolder(itemLayoutView);
+				return mViewHolder;
+			}
+			
+			@Override
+			public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position){
+				((SimpleViewHolder) viewHolder).foodTitle.setText(fruitsData.get(position).getFruitName());
+				
+			}
+
+			@Override
+			public int getItemCount() {
+				return fruitsData.size();
+			}
+			
+		
+		});
+		
+		mAdapter.setParallaxHeader(LayoutInflater.from(getActivity()).inflate(R.layout.parallax_header,recyclerView, false), recyclerView);
+//		mAdapter.setOnParallaxScroll(new ParallaxRecyclerAdapter.OnParallaxScroll() {
+//			@Override
+//			public void onParallaxScroll(float percentage, float offset, View parallax) {
+//				 Drawable c = mToolbar.getBackground();
+//				 c.setAlpha(Math.round(percentage * 255));
+//				 mToolbar.setBackground(c);
+//				
+//			}
+//		});
         //set adapter
         recyclerView.setAdapter(mAdapter);
         //set item animator to DefaultAnimator
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 	}
 	
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data)
-	{    
-	    if (resultCode == Activity.RESULT_OK) 
-	    {
-	    	if(data.getStringExtra(ZBarConstants.SCAN_RESULT).toString().equals("redeem")){
-	    		Toast.makeText(getActivity(), "Code Successfull", Toast.LENGTH_SHORT).show();
-	    	}else{
-	    		Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();
+	static class SimpleViewHolder extends RecyclerView.ViewHolder {
+		public TextView foodTitle;
+		public TextView foodDescription;
+		public SimpleViewHolder(View itemView) {
+			super(itemView);
+			foodTitle = (TextView) itemView.findViewById(R.id.firstLine);
+			foodDescription = (TextView) itemView.findViewById(R.id.secondLine);
+		}
 
-	    	}
-	        // Scan result is available by making a call to data.getStringExtra(ZBarConstants.SCAN_RESULT)
-	        // Type of the scan result is available by making a call to data.getStringExtra(ZBarConstants.SCAN_RESULT_TYPE)
-	        //Toast.makeText(getActivity(), "Scan Result = " + data.getStringExtra(ZBarConstants.SCAN_RESULT).toString(), Toast.LENGTH_SHORT).show();
-	        //Toast.makeText(getActivity(), "Scan Result Type = " + data.getIntExtra(ZBarConstants.SCAN_RESULT_TYPE, 0), Toast.LENGTH_SHORT).show();
-	        // The value of type indicates one of the symbols listed in Advanced Options below.
-	    } else if(resultCode == Activity.RESULT_CANCELED) {
-	        Toast.makeText(getActivity(), "Camera unavailable", Toast.LENGTH_SHORT).show();
-	    }
 	}
+	
+	
 }

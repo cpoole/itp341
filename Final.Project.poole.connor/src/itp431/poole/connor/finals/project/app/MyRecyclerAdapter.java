@@ -35,8 +35,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 		
 		public ViewHolder(View itemLayoutView){
 			super(itemLayoutView);
-			rowNumberTextView = (TextView) itemLayoutView.findViewById(R.id.rowNumberTextView);
-			nameTextView = (TextView) itemLayoutView.findViewById(R.id.nameTextView);
+//			rowNumberTextView = (TextView) itemLayoutView.findViewById(R.id.rowNumberTextView);
+//			nameTextView = (TextView) itemLayoutView.findViewById(R.id.nameTextView);
 		}
 	}
 	

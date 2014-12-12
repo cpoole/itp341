@@ -1,0 +1,16 @@
+package itp431.poole.connor.finals.project.app;
+
+public class userManager {
+	private int numPunches;
+	private String guid;
+	
+	public userManager(){
+		numPunches =0;
+	}
+	public void addPunch(){
+		numPunches ++;
+	}
+	public int getNumPunches(){
+		return numPunches;
+	}
+}

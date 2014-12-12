@@ -5,17 +5,23 @@ import itp431.poole.connor.finals.project.app.ZBar.ZBarConstants;
 import itp431.poole.connor.finals.project.app.listeners.RecyclerItemClickListener;
 import itp431.poole.connor.finals.project.app.models.FruitModel;
 import itp431.poole.connor.finals.project.app.views.drawView;
+import itp431.poole.connor.finals.project.app.views.punchMark;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import net.sourceforge.zbar.Symbol;
 
@@ -24,6 +30,10 @@ public class PunchCardFragment extends Fragment {
 	private static final int ZBAR_QR_SCANNER_REQUEST = 1;
 	private int width;
 	private int height;
+	//private userManager user;
+	private View linearView;
+	private LinearLayout linearLayout;
+	private drawView rootView;
 	/**
 	 * The fragment argument representing the section number for this
 	 * fragment.
@@ -45,11 +55,16 @@ public class PunchCardFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		drawView rootView = new drawView(getActivity());
-		//rootView = inflater.inflate(R.layout.punchcard_fragment, container, false);
-		width = rootView.getWidth();
-		height = rootView.getHeight();
+	public drawView onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		rootView = new drawView(getActivity());
+		linearView = inflater.inflate(R.layout.punchcard_fragment, container, false);
+		linearLayout = (LinearLayout) linearView.findViewById(R.id.rootLinear);
+		rootView.setBackgroundResource(R.drawable.bg1);
+		Toast.makeText(getActivity(), "numPunches"+ userManager.getNumPunches(), Toast.LENGTH_SHORT).show();
+		for (int i=0; i<userManager.getNumPunches(); i++){
+			linearLayout.addView(new punchMark(getActivity(),i));
+		}
+		rootView.invalidate();
 		return rootView;
 	}
 
@@ -72,7 +87,8 @@ public class PunchCardFragment extends Fragment {
 	    if (resultCode == Activity.RESULT_OK) 
 	    {
 	    	if(data.getStringExtra(ZBarConstants.SCAN_RESULT).toString().equals("redeem")){
-	    		Toast.makeText(getActivity(), "Code Successfull", Toast.LENGTH_SHORT).show();
+	    		Toast.makeText(getActivity(), "Code Successfull from punch", Toast.LENGTH_SHORT).show();
+	    		//addPunch();
 	    	}else{
 	    		Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();
 
@@ -86,4 +102,11 @@ public class PunchCardFragment extends Fragment {
 	        //Toast.makeText(getActivity(), "Camera unavailable", Toast.LENGTH_SHORT).show();
 	    }
 	}
+	public void addPunch(){
+		int lastNum = userManager.getNumPunches();
+		userManager.addPunch();
+		int currentNum = lastNum++;
+		linearLayout.addView(new punchMark(getActivity(),currentNum));
+	}
+
 }

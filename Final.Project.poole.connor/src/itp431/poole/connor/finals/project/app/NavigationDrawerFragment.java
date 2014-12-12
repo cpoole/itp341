@@ -1,13 +1,19 @@
 package itp431.poole.connor.finals.project.app;
 
+import itp431.poole.connor.finals.project.app.ZBar.ZBarConstants;
+import itp431.poole.connor.finals.project.app.ZBar.ZBarScannerActivity;
+import itp431.poole.connor.finals.project.app.views.punchMark;
+import net.sourceforge.zbar.Symbol;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -59,7 +65,10 @@ public class NavigationDrawerFragment extends Fragment {
 	private int mCurrentSelectedPosition = 0;
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
-
+	
+	private static final int ZBAR_SCANNER_REQUEST = 0;
+	private static final int ZBAR_QR_SCANNER_REQUEST = 1;
+	
 	public NavigationDrawerFragment() {
 	}
 
@@ -201,7 +210,7 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	private void selectItem(int position) {
-		if(position !=5){
+		if(position !=5 || position !=3){
 			Log.d("itp341", "position tapped = " + position);
 			mCurrentSelectedPosition = position;
 		}
@@ -268,6 +277,9 @@ public class NavigationDrawerFragment extends Fragment {
 
 		if (item.getItemId() == R.id.action_example) {
 			Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(getActivity(), ZBarScannerActivity.class);
+			intent.putExtra(ZBarConstants.SCAN_MODES,  new int[]{Symbol.QRCODE});
+			startActivityForResult(intent, ZBAR_SCANNER_REQUEST);
 			return true;
 		}
 
@@ -300,4 +312,26 @@ public class NavigationDrawerFragment extends Fragment {
 		 */
 		void onNavigationDrawerItemSelected(int position);
 	}
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	{    
+	    if (resultCode == Activity.RESULT_OK) 
+	    {
+	    	if(data.getStringExtra(ZBarConstants.SCAN_RESULT).toString().equals("redeem")){
+	    		Toast.makeText(getActivity(), "Code Successfull from nav", Toast.LENGTH_SHORT).show();
+	    		userManager.addPunch();
+	    		selectItem(0);
+	    	}else{
+	    		Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();
+	    	}
+	        // Scan result is available by making a call to data.getStringExtra(ZBarConstants.SCAN_RESULT)
+	        // Type of the scan result is available by making a call to data.getStringExtra(ZBarConstants.SCAN_RESULT_TYPE)
+	        //Toast.makeText(getActivity(), "Scan Result = " + data.getStringExtra(ZBarConstants.SCAN_RESULT).toString(), Toast.LENGTH_SHORT).show();
+	        //Toast.makeText(getActivity(), "Scan Result Type = " + data.getIntExtra(ZBarConstants.SCAN_RESULT_TYPE, 0), Toast.LENGTH_SHORT).show();
+	        // The value of type indicates one of the symbols listed in Advanced Options below.
+	    } else if(resultCode == Activity.RESULT_CANCELED) {
+	        Toast.makeText(getActivity(), "Camera unavailable", Toast.LENGTH_SHORT).show();
+	    }
+	}
+
 }
