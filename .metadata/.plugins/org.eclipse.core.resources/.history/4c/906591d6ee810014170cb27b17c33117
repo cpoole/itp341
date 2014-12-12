@@ -1,0 +1,16 @@
+package itp431.poole.connor.finals.project.app;
+
+import java.util.ArrayList;
+
+public final class menuManager {
+	private ArrayList<menuItem> menuEntries;
+
+	public ArrayList<menuItem> getMenuEntries() {
+		return menuEntries;
+	}
+
+	public void setMenuEntries(ArrayList<menuItem> menuEntries) {
+		this.menuEntries = menuEntries;
+	}
+
+}

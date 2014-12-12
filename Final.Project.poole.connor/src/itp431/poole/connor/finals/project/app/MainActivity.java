@@ -3,6 +3,8 @@ package itp431.poole.connor.finals.project.app;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,6 +37,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 public class MainActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+	public static menuItem[] food;
 	public static final String PREFERENCE_FILENAME = "itp.341.poole.connor.a5.app.app_prefs";
 	public static final String PREFERENCE_INITIAL_BOOT = "itp.341.poole.connor.a5.app.initial_boot";
 	SharedPreferences prefs;
@@ -96,7 +99,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		if(prefs.getString(PREFERENCE_INITIAL_BOOT, "default") == "default"){
 			try {
 				AssetManager am = getApplicationContext().getAssets();
-				BufferedReader bfr = new BufferedReader(new InputStreamReader(am.open("initial.json")));
+				BufferedReader bfr = new BufferedReader(new InputStreamReader(am.open("menu.json")));
 				while(true){
 					String line = bfr.readLine();
 					if (line == null)
@@ -115,7 +118,7 @@ public class MainActivity extends Activity implements NavigationDrawerFragment.N
 		}
 
 		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-		//notes = gson.fromJson(FileContent,  Note[].class);
+		menuManager.setMenuEntries(new ArrayList<menuItem>(Arrays.asList(gson.fromJson(FileContent,  menuItem[].class))));
 		
 	}
 
